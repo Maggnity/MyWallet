@@ -1,7 +1,7 @@
-import { IUserRepository } from "../repository/IUserRepository";
-import { User } from "../types/User";
-import { ICreateUser } from "./contracts/ICreateUser";
+import { IUserRepository } from "../../repository/contracts/IUserRepository";
+import { User } from "../../types/User";
 import { v4 as uuidv4 } from 'uuid'
+import { ICreateUser } from "./contracts/ICreateUser";
 
 export default class CreateUser implements ICreateUser {
 

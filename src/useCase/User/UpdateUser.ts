@@ -1,7 +1,7 @@
 import { user } from "@prisma/client";
-import { IUserRepository } from "../repository/IUserRepository";
-import { User } from "../types/User";
+import { User } from "../../types/User";
 import { IUpdateUser } from "./contracts/IUpdateUser";
+import { IUserRepository } from "../../repository/contracts/IUserRepository";
 
 export class UpdateUser implements IUpdateUser {
 

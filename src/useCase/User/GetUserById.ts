@@ -1,5 +1,5 @@
-import { IUserRepository } from "../repository/IUserRepository";
-import { User } from "../types/User";
+import { IUserRepository } from "../../repository/contracts/IUserRepository";
+import { User } from "../../types/User";
 import { IGetUser } from "./contracts/IGetUser";
 
 export default class getUserUseCase implements IGetUser {
@@ -9,7 +9,7 @@ export default class getUserUseCase implements IGetUser {
     ) { }
 
 
-    async execute(token: string): Promise<User | null> {
+    async execute(token: string): Promise<Partial<User> | null> {
 
         console.log(`Getting user with id ${token}`)
         

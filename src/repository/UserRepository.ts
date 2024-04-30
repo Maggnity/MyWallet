@@ -1,8 +1,6 @@
 import { user } from "@prisma/client";
 import { prisma } from "../app";
-import { db } from "../database";
-import { User } from "../types/User";
-import { IUserRepository } from "./IUserRepository";
+import { IUserRepository } from "./contracts/IUserRepository";
 
 export default class UserRepository implements IUserRepository {
 
@@ -33,12 +31,17 @@ export default class UserRepository implements IUserRepository {
 
     }
 
-    async findUserWithToken(token: string): Promise<user | null> {
+    async findUserWithToken(token: string): Promise<Partial<user> | null> {
 
         const response = await prisma.user.findUnique({
             where: {
                 id: token
             },
+            select: {
+                id: true,
+                email: true,
+                name: true
+            }
         })
 
         return response

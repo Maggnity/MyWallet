@@ -1,9 +1,9 @@
 import { Router } from "express"
 import { userController } from "../controller/userController"
-import getUserUseCase from "../useCase/GetUserByEmail"
+import getUserUseCase from "../useCase/User/GetUserByEmail"
 import UserRepository from "../repository/UserRepository"
-import CreateUser from "../useCase/CreateUser"
-import { UpdateUser } from "../useCase/UpdateUser"
+import CreateUser from "../useCase/User/CreateUser"
+import { UpdateUser } from "../useCase/User/UpdateUser"
 
 export const user = () => {
 

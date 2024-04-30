@@ -9,7 +9,16 @@ datasource db {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model account {
-    id Int @id @unique
+    id         String    @id @unique
+    agency     Int
+    bank       Int
+    account    Int
+    type       String
+    created_at DateTime?
+    updated_at DateTime?
+
+    user_id       String
+    account_owner user   @relation(fields: [user_id], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -34,4 +43,5 @@ model user {
     password     String    @db.VarChar(100)
     created_date DateTime? @db.DateTime()
     updated_date DateTime? @db.DateTime()
+    account      account[]
 }

@@ -1,8 +1,8 @@
 import UserRepository from "../repository/UserRepository"
-import CreateUser from "../useCase/CreateUser"
-import getUserByEmail from "../useCase/GetUserByEmail"
-import getUserUseCase from "../useCase/GetUserById"
-import { UpdateUser } from "../useCase/UpdateUser"
+import CreateUser from "../useCase/User/CreateUser"
+import getUserByEmail from "../useCase/User/GetUserByEmail"
+import getUserUseCase from "../useCase/User/GetUserById"
+import { UpdateUser } from "../useCase/User/UpdateUser"
 
 
 const repo = new UserRepository()
