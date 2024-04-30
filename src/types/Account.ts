@@ -9,7 +9,7 @@ export interface AccountDTO {
 }
 
 export type CreateAccountDTO = {
-
+    id: string | null
     bank: number,
     agency: number,
     number: number,

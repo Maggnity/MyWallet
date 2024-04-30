@@ -19,7 +19,10 @@ export interface IAccountRepository {
         bank: number,
         account: number,
         agency: number
-    ) => Promise<Partial<account> | undefined>
+    ) => Promise<Partial<account> | null>
+    getAvailableAccountById: (
+        id: account["id"],
+    ) => Promise<Partial<account> | null>
 
     createAccount: (userID: string, data: AccountDTO) => Promise<account>
 

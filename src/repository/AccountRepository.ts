@@ -46,7 +46,7 @@ export default class AccountRepository implements IAccountRepository {
         bank: number,
         account: number,
         agency: number
-    ): Promise<Partial<account> | undefined> {
+    ): Promise<Partial<account> | null> {
 
         const response = await prisma.account.findFirst({
             where: {
@@ -62,9 +62,26 @@ export default class AccountRepository implements IAccountRepository {
             }
 
         })
-        return response as unknown as Promise<Partial<account> | undefined>
+        return response
     }
 
+    async getAvailableAccountById(
+        aid: string,
+    ): Promise<Partial<account> | null> {
+
+        const response = await prisma.account.findUnique({
+            where: {
+                id: aid
+            },
+            select: {
+                account: true,
+                agency: true,
+                bank: true,
+            }
+
+        })
+        return response
+    }
     async createAccount(userID: string, data: AccountDTO): Promise<account> {
 
 
@@ -107,7 +124,7 @@ export default class AccountRepository implements IAccountRepository {
 
     async deleteAccount(userID: string, aid: string): Promise<void> {
 
-        const response = await prisma.account.delete({
+        await prisma.account.delete({
             where: {
                 id: aid,
                 user_id: userID
