@@ -26,7 +26,7 @@ export interface IAccountRepository {
 
     createAccount: (userID: string, data: AccountDTO) => Promise<account>
 
-    updateAccount: (userID: string, aid: account["id"], data: AccountDTO) => Promise<account>
+    updateAccount: (userID: string, aid: account["id"], data: AccountDTO) => Promise<Partial<account>>
 
     deleteAccount: (userID: string, aid: account["id"]) => Promise<void>
 

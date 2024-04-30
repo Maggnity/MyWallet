@@ -4,6 +4,7 @@ import { CreateAccountDTO } from "../types/Account"
 import CreateAccountUseCase from "../useCase/Account/CreateAccount"
 import { DeleteAccount } from "../useCase/Account/DeleteAccount"
 import { GetAvailableAccountsByUserID } from "../useCase/Account/GetAvailableAccountsByUserID"
+import { UpdateAcount } from "../useCase/Account/UpdateAccount"
 import getUserUseCase from "../useCase/User/GetUserById"
 
 const dn = Date.now()
@@ -16,6 +17,7 @@ const getUser = new getUserUseCase(userRepository)
 
 const createAccount = new CreateAccountUseCase(accountRepository, getUser)
 const getAccountsByUserID = new GetAvailableAccountsByUserID(accountRepository)
+const updateAccount = new UpdateAcount(accountRepository)
 const deleteAccount = new DeleteAccount(accountRepository)
 let data: CreateAccountDTO = {
     id: null,
@@ -69,6 +71,13 @@ test("Se conta não existir deve retornar null!", async () => {
     expect(account).toBeNull()
 })
 
+test("Deve atualizar account", async () => {
+    if (!data.id) throw Error("Erro ao gerar ID")
+    data.agency = 1011
+    const response = await updateAccount.execute("teste", data.id, data)
+    expect(response).toHaveProperty("updated_at")
+
+})
 
 test("Deve deletar uma conta com o ID", async () => {
 

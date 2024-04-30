@@ -1,5 +1,5 @@
 import { IAccountRepository } from "../../repository/contracts/IAccountRepository";
-import { IDeleteAccount } from "./IDeleteAccount";
+import { IDeleteAccount } from "./contracts/IDeleteAccount";
 
 export class DeleteAccount implements IDeleteAccount {
 

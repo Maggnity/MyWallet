@@ -102,7 +102,7 @@ export default class AccountRepository implements IAccountRepository {
 
 
 
-    async updateAccount(userID: string, aid: string, data: AccountDTO): Promise<account> {
+    async updateAccount(userID: string, aid: string, data: AccountDTO): Promise<Partial<account>> {
 
 
         const response = await prisma.account.update({
@@ -116,6 +116,9 @@ export default class AccountRepository implements IAccountRepository {
             where: {
                 id: aid,
                 user_id: userID
+            },
+            select: {
+                updated_at: true
             }
         })
 
