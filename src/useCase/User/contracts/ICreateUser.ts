@@ -1,4 +1,4 @@
-import { User } from "../../types/User";
+import { User } from "../../../types/User";
 
 export class ICreateUser {
     execute: (data: User) => Promise<{

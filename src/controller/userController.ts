@@ -1,9 +1,8 @@
 import express, { response } from 'express'
-import { IUserRepository } from '../repository/IUserRepository'
-import { IGetUser } from '../useCase/contracts/IGetUser'
-import { ICreateUser } from '../useCase/contracts/ICreateUser'
 import BaseController from './baseController'
-import { IUpdateUser } from '../useCase/contracts/IUpdateUser'
+import { IGetUser } from '../useCase/User/contracts/IGetUser'
+import { ICreateUser } from '../useCase/User/contracts/ICreateUser'
+import { IUpdateUser } from '../useCase/User/contracts/IUpdateUser'
 
 export class userController extends BaseController {
 

@@ -1,5 +1,5 @@
-import { IUserRepository } from "../repository/IUserRepository";
-import { User } from "../types/User";
+import { IUserRepository } from "../../repository/contracts/IUserRepository";
+import { User } from "../../types/User";
 import { IGetUser } from "./contracts/IGetUser";
 
 export default class getUserByEmail implements IGetUser {
