@@ -12,20 +12,29 @@ model account {
     id         String    @id @unique
     agency     Int
     bank       Int
-    account    Int
+    account    Int       @unique
     type       String
+    balance    Decimal
     created_at DateTime?
     updated_at DateTime?
 
     user_id       String
-    account_owner user   @relation(fields: [user_id], references: [id])
+    cards         cards[] @relation()
+    account_owner user    @relation(fields: [user_id], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model cards {
-    id Int?
-
-    @@ignore
+    id         String    @id
+    number     String    @db.VarChar(16)
+    name       String    @db.VarChar(60)
+    flag       String    @db.VarChar(60)
+    cvv        String    @db.VarChar(3)
+    type       String    @db.VarChar(16)
+    account    Int       @db.Int
+    created_at DateTime?
+    updated_at DateTime?
+    card_owner account   @relation(fields: [account], references: [account])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.

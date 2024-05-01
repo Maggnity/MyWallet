@@ -1,4 +1,6 @@
+import { Account } from "../Entity/Account"
 import AccountRepository from "../repository/AccountRepository"
+import { CardRepository } from "../repository/CardRepository"
 import UserRepository from "../repository/UserRepository"
 import { CreateAccountDTO } from "../types/Account"
 import CreateAccountUseCase from "../useCase/Account/CreateAccount"
@@ -9,11 +11,15 @@ import getUserUseCase from "../useCase/User/GetUserById"
 
 const dn = Date.now()
 
+
+
 const accountRepository = new AccountRepository()
 const userRepository = new UserRepository()
+const cardRepository = new CardRepository()
+
+const accountService = new Account(accountRepository, cardRepository)
 
 const getUser = new getUserUseCase(userRepository)
-
 
 const createAccount = new CreateAccountUseCase(accountRepository, getUser)
 const getAccountsByUserID = new GetAvailableAccountsByUserID(accountRepository)
@@ -23,7 +29,7 @@ let data: CreateAccountDTO = {
     id: null,
     agency: 1010,
     bank: Number((Math.random() * 1000).toFixed(0)),
-    number: 5465465,
+    number: Number((Math.random() * 100).toFixed(0)),
     type: "current"
 }
 
@@ -79,7 +85,15 @@ test("Deve atualizar account", async () => {
 
 })
 
-test("Deve deletar uma conta com o ID", async () => {
+test("Deve depositar um valor corretamente", async() => {
+
+    if (!data.id) throw Error("Erro ao gerar ID")
+    const response = await accountService.deposit(data.id, 50)
+
+    expect(parseFloat(String(response.balance))).toBe(50)
+})
+
+/* test("Deve deletar uma conta com o ID", async () => {
 
     if (!data.id) return console.log("Id não foi criado corretamente!")
 
@@ -87,5 +101,5 @@ test("Deve deletar uma conta com o ID", async () => {
 
     expect(response).toBe(undefined)
 
-})
+}) */
 

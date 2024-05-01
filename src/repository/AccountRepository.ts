@@ -64,6 +64,20 @@ export default class AccountRepository implements IAccountRepository {
         })
         return response
     }
+    async updateBalance(aid: string, amount: number): Promise<{balance:account['balance']}> {
+        const response = await prisma.account.update({
+            where: {
+                id: aid
+            }, 
+            data: {
+                balance: amount
+            },
+            select: {
+                balance: true
+            }
+        })
+        return response
+    }
 
     async getAvailableAccountById(
         aid: string,
@@ -77,6 +91,7 @@ export default class AccountRepository implements IAccountRepository {
                 account: true,
                 agency: true,
                 bank: true,
+                balance: true
             }
 
         })
@@ -93,6 +108,7 @@ export default class AccountRepository implements IAccountRepository {
                 bank: data.bank,
                 type: data.type,
                 user_id: userID,
+                balance: 0,
                 created_at: new Date()
             },
         })

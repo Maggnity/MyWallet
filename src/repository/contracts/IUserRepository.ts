@@ -1,5 +1,5 @@
 import { user } from "@prisma/client";
-import { User } from "../../types/User";
+import { CreateUserDTO, User } from "../../types/User";
 
 export interface IUserRepository {
 
@@ -7,7 +7,7 @@ export interface IUserRepository {
     findUserWithToken: (token: string) => Promise<Partial<user> | null>
     findUserWithEmail: (email: string) => Promise<user | null>
 
-    createUser: (data: user) => Promise<{
+    createUser: (data: CreateUserDTO) => Promise<{
         id: string,
         email: string,
         name: string

@@ -1,5 +1,5 @@
 import { IUserRepository } from "../../repository/contracts/IUserRepository";
-import { User } from "../../types/User";
+import { CreateUserDTO, User } from "../../types/User";
 import { v4 as uuidv4 } from 'uuid'
 import { ICreateUser } from "./contracts/ICreateUser";
 
@@ -9,32 +9,35 @@ export default class CreateUser implements ICreateUser {
         private userRepository: IUserRepository
     ) { }
 
-    async execute(data: User): Promise<{
+    async execute(data: CreateUserDTO): Promise<{
         name: string,
         id: string,
         email: string
     }> {
-        const emailAlreadyRegistered = await this.userRepository.findUserWithEmail(data.email)
+        try {
 
-        if (emailAlreadyRegistered) throw Error("Email já registrado!")
+            const emailAlreadyRegistered = await this.userRepository.findUserWithEmail(data.email)
 
-        data.id = uuidv4();
+            if (emailAlreadyRegistered) throw Error("Email já registrado!")
 
-        this.createdDate(data);
-        this.generateId(data)
 
-        if (!data.id) throw Error("Falha ao criar ID")
+            this.createdDate(data);
+            this.generateId(data)
 
-        //@ts-ignore
-        const response = await this.userRepository.createUser(data)
 
-        return response
+            const response = await this.userRepository.createUser(data)
+
+            return response
+        } catch (error: any) {
+            console.log(error)
+            return error
+        }
     }
 
-    private generateId(data) {
+    private generateId(data: any) {
         data.id = uuidv4()
     }
-    private createdDate(data) {
+    private createdDate(data: any) {
         data.created_date = new Date()
     }
 };

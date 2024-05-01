@@ -1,12 +1,14 @@
 import { user } from "@prisma/client";
 import { prisma } from "../app";
 import { IUserRepository } from "./contracts/IUserRepository";
+import { v4 as uuidv4 } from 'uuid'
+import { CreateUserDTO } from "../types/User";
 
 export default class UserRepository implements IUserRepository {
 
     constructor() { }
 
-    async createUser(data: user): Promise<{
+    async createUser(data: CreateUserDTO): Promise<{
         email: string,
         id: string,
         name: string
@@ -14,7 +16,7 @@ export default class UserRepository implements IUserRepository {
 
         const response = await prisma.user.create({
             data: {
-                id: data.id,
+                id:  uuidv4(),
                 email: data.email,
                 name: data.name,
                 password: data.password,

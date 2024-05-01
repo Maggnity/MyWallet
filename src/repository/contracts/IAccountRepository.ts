@@ -4,7 +4,6 @@ import { AccountDTO } from "../../types/Account";
 export interface IAccountRepository {
 
 
-
     getAvailableAccountsByUserID: (
         userID: string,
         filters?: {
@@ -20,6 +19,8 @@ export interface IAccountRepository {
         account: number,
         agency: number
     ) => Promise<Partial<account> | null>
+
+    updateBalance: (aid: account["id"], amount: number) => Promise<{ balance: account["balance"]}>
     getAvailableAccountById: (
         id: account["id"],
     ) => Promise<Partial<account> | null>
