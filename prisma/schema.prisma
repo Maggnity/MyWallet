@@ -19,8 +19,9 @@ model account {
     updated_at DateTime?
 
     user_id       String
-    cards         cards[] @relation()
-    account_owner user    @relation(fields: [user_id], references: [id])
+    cards         cards[]        @relation()
+    account_owner user           @relation(fields: [user_id], references: [id])
+    transactions  transactions[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -39,9 +40,17 @@ model cards {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model transactions {
-    id Int?
+    id String @id @unique
 
-    @@ignore
+    aid    String
+    type   String
+    amount Float
+    status String
+
+    created_at DateTime?
+    updated_at DateTime?
+
+    account account @relation(fields: [aid], references: [id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.

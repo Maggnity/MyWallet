@@ -2,6 +2,7 @@ import { Account } from "../Entity/Account"
 import AccountRepository from "../repository/AccountRepository"
 import { CardRepository } from "../repository/CardRepository"
 import UserRepository from "../repository/UserRepository"
+import { TransactionRepository } from "../repository/transactionRepository"
 import { CreateAccountDTO } from "../types/Account"
 import CreateAccountUseCase from "../useCase/Account/CreateAccount"
 import { DeleteAccount } from "../useCase/Account/DeleteAccount"
@@ -16,8 +17,8 @@ const dn = Date.now()
 const accountRepository = new AccountRepository()
 const userRepository = new UserRepository()
 const cardRepository = new CardRepository()
-
-const accountService = new Account(accountRepository, cardRepository)
+const transactionRepository = new TransactionRepository()
+const accountService = new Account(accountRepository, cardRepository, transactionRepository)
 
 const getUser = new getUserUseCase(userRepository)
 
@@ -85,12 +86,25 @@ test("Deve atualizar account", async () => {
 
 })
 
-test("Deve depositar um valor corretamente", async() => {
+test("Deve depositar um valor corretamente", async () => {
 
     if (!data.id) throw Error("Erro ao gerar ID")
     const response = await accountService.deposit(data.id, 50)
-
+    
+    expect(response.id_transaction).toBeDefined()
+    expect(response.status).toBe("pending")
     expect(parseFloat(String(response.balance))).toBe(50)
+})
+
+
+test("Deve sacar um valor corretamente", async () => {
+    if (!data.id) throw Error("Erro ao gerar ID")
+
+
+    const response = await accountService.cashOut(data.id, 50)
+    expect(response.id_transaction).toBeDefined()
+    expect(response.status).toBe("pending")
+    expect(parseFloat(String(response.balance))).toBe(0)
 })
 
 /* test("Deve deletar uma conta com o ID", async () => {
