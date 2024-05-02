@@ -19,8 +19,9 @@ model account {
     updated_at DateTime?
 
     user_id       String
-    cards         cards[] @relation()
-    account_owner user    @relation(fields: [user_id], references: [id])
+    cards         cards[]        @relation()
+    account_owner user           @relation(fields: [user_id], references: [id])
+    transactions  transactions[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -39,9 +40,32 @@ model cards {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model transactions {
-    id Int?
+    id String @id @unique
 
-    @@ignore
+    aid String
+
+    name        String?
+    description String?
+
+    type   String
+    amount Float
+    status String
+
+    created_at           DateTime?
+    updated_at           DateTime?
+    category             String?
+    transaction_category transactions_category? @relation(fields: [category], references: [id])
+    account              account                @relation(fields: [aid], references: [id])
+}
+
+model transactions_category {
+    id          String  @id @unique
+    name        String?
+    description String?
+    user_id     String
+    user        user    @relation(fields: [user_id], references: [id])
+
+    transactions transactions[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -52,5 +76,7 @@ model user {
     password     String    @db.VarChar(100)
     created_date DateTime? @db.DateTime()
     updated_date DateTime? @db.DateTime()
-    account      account[]
+
+    account                account[]
+    transactions_categoriy transactions_category[]
 }
