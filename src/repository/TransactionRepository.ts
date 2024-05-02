@@ -59,6 +59,7 @@ export class TransactionRepository implements ITransactionRepository {
         return response
     }
 
+    
     async updateTransaction(id: transactions["id"], data: NewTransactionDTO): Promise<TransactionDAO> {
 
 
