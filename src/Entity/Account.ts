@@ -2,7 +2,15 @@ import { account } from "@prisma/client";
 import { IAccountRepository } from "../repository/contracts/IAccountRepository";
 import { ICardRepository } from "../repository/contracts/ICardRepository";
 import { CreateCardDTO } from "../types/Cards";
-import { ITransactionRepository } from "../repository/contracts/ITransactionRepository";
+import { ITransactionRepository, NewTransactionDTO } from "../repository/contracts/ITransactionRepository";
+
+
+type DepositData = {
+    value: number,
+    category: string,
+    name: string,
+    description: string
+}
 
 export class Account {
 
@@ -14,36 +22,46 @@ export class Account {
     ) { }
 
 
-    public async deposit(aid: string, value: number) {
+    public async deposit(aid: string, data: DepositData) {
 
         const account = await this.validateAccountById(aid)
 
-        const newValue = this.addValue(account.balance, value)
-        const transaction = await this.newTransaction(aid, value, "deposit")
+        const newValue = this.addValue(account.balance, data.value)
+        const transaction = await this.newTransaction(aid, data.value, "deposit", data.category, data.description, data.name)
         const response = await this.accountRepository.updateBalance(aid, newValue)
 
         return {
             id_transaction: transaction.id,
             status: transaction.status,
-            balance: response.balance
+            balance: response.balance,
+            type: transaction.type
         }
 
     }
 
-    public async cashOut(aid: string, value: number) {
+    public async cashOut(aid: string, data: DepositData) {
 
         const account = await this.validateAccountById(aid)
 
-        const newValue = this.subtractValue(account.balance, value)
-        const transaction = await this.newTransaction(aid, value, "deposit")
+        const newValue = this.subtractValue(account.balance, data.value)
+        const transaction = await this.newTransaction(aid, data.value, "cashout", data.category, data.description, data.name)
 
         const response = await this.accountRepository.updateBalance(aid, newValue)
 
         return {
             id_transaction: transaction.id,
             status: transaction.status,
-            balance: response.balance
+            balance: response.balance,
+            type: transaction.type
         }
+    }
+
+    public async updateTransaction(tid: string, data: NewTransactionDTO) {
+
+        const response = await this.transactionRepository.updateTransaction(tid, data)
+
+        return response
+
     }
 
     private async createCard(account: number, data: CreateCardDTO) {
@@ -77,13 +95,20 @@ export class Account {
     private async newTransaction(
         aid: account["id"],
         amount: number,
-        type: "deposit" | "cashout"
+        type: "deposit" | "cashout",
+        category?: string,
+        description?: string,
+        name?: string
     ) {
 
-        const data = {
+        const data: NewTransactionDTO = {
             amount,
             type,
-            status: "pending"
+            status: "pending",
+            category,
+            description,
+            name
+
         }
 
         const response = await this.transactionRepository.newTransaction(aid, data)

@@ -92,6 +92,7 @@ test("Deve depositar um valor corretamente", async () => {
     const response = await accountService.deposit(data.id, 50)
     
     expect(response.id_transaction).toBeDefined()
+    expect(response.type).toBe("deposit")
     expect(response.status).toBe("pending")
     expect(parseFloat(String(response.balance))).toBe(50)
 })
@@ -103,6 +104,7 @@ test("Deve sacar um valor corretamente", async () => {
 
     const response = await accountService.cashOut(data.id, 50)
     expect(response.id_transaction).toBeDefined()
+    expect(response.type).toBe("cashout")
     expect(response.status).toBe("pending")
     expect(parseFloat(String(response.balance))).toBe(0)
 })
